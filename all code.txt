@@ -1,0 +1,458 @@
+﻿1111"BFS"
+
+#include <iostream>
+using namespace std;
+
+void bfs(){
+        
+    int n;
+    int graph[10][10];
+    int visited[10]={0};
+    int queue[10];
+
+    cout<<"Enter number of vertices: ";
+    cin>>n;
+
+    cout<<"Enter graph:"<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>graph[i][j];
+        }
+    }
+
+    int start;
+
+    cout<<"Enter starting vertex: ";
+    cin>>start;
+
+    int front=0;
+    int rear=0;
+
+    visited[start]=1;
+    queue[rear]=start;
+    rear++;
+
+    cout<<"\nBFS : ";
+
+    while(front<rear){
+        int node=queue[front];
+        front++;
+
+        cout<<node<<" ";
+
+        for(int i=0;i<n;i++){
+            if(graph[node][i]==1 && visited[i]==0){
+                visited[i]=1;
+                queue[rear]=i;
+                rear++;
+            }
+        }
+    }
+}
+
+int main(){
+        
+    bfs();
+    
+    return 0;
+}
+
+
+
+2222"DFS"
+
+#include <iostream>
+using namespace std;
+
+int graph[10][10];
+int visited[10]={0};
+int n;
+
+void dfs(int node){
+        
+    visited[node]=1;
+    cout<<node<<" ";
+
+    for(int i=0;i<n;i++){
+        if(graph[node][i]==1 && visited[i]==0){
+            dfs(i);
+        }
+    }
+}
+
+int main(){
+        
+    cout<<"Enter number of vertices: ";
+    cin>>n;
+
+    cout<<"Enter graph:"<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>graph[i][j];
+        }
+    }
+
+    int start;
+
+    cout<<"Enter starting vertex: ";
+    cin>>start;
+
+    cout<<"\nDFS : ";
+    dfs(start);
+
+    return 0;
+}
+
+
+
+3333"DIJKSTRA"
+
+#include <iostream>
+using namespace std;
+
+void dijkstra(){
+        
+    int n;
+    int graph[10][10];
+
+    cout<<"Enter number of vertices: ";
+    cin>>n;
+
+    cout<<"Enter weighted graph:"<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>graph[i][j];
+        }
+    }
+
+    int start;
+
+    cout<<"Enter starting vertex: ";
+    cin>>start;
+
+    int distance[10];
+    int visited[10]={0};
+
+    for(int i=0;i<n;i++)
+        distance[i]=1000;
+
+    distance[start]=0;
+
+    for(int count=0;count<n;count++){
+        int min=1000;
+        int node=-1;
+
+        for(int i=0;i<n;i++){
+            if(visited[i]==0 && distance[i]<min){
+                min=distance[i];
+                node=i;
+            }
+        }
+
+        visited[node]=1;
+
+        for(int i=0;i<n;i++){
+            if(graph[node][i]!=0 && visited[i]==0){
+                if(distance[node]+graph[node][i]<distance[i]){
+                    distance[i]=distance[node] + graph[node][i];
+                }
+            }
+        }
+    }
+
+    cout<<"\nDijkstra : "<<endl;
+
+    for(int i=0;i<n;i++){
+        cout<<start<<" - "<<i<<" = "<<distance[i]<<endl;
+    }
+}
+
+int main(){
+        
+    dijkstra();
+
+    return 0;
+}
+
+
+
+4444"BELLMAN-FORD"
+
+#include <iostream>
+using namespace std;
+
+struct Edge{
+    int start;
+    int end;
+    int cost;
+};
+
+void bellmanFord(){
+
+    int n,e;
+
+    cout<<"Enter number of vertices: ";
+    cin>>n;
+
+    cout<<"Enter number of edges: ";
+    cin>>e;
+
+    Edge edge[20];
+
+    cout<<"Enter start end cost:"<<endl;
+
+    for(int i=0;i<e;i++){
+        cin>>edge[i].start>>edge[i].end>>edge[i].cost;
+    }
+
+    int start;
+
+    cout<<"Enter starting vertex: ";
+    cin>>start;
+
+    int distance[10];
+
+    for(int i=0;i<n;i++)
+        distance[i]=1000;
+
+    distance[start]=0;
+
+    for(int i=0;i<n-1;i++){
+        for(int j=0;j<e;j++){
+            int u=edge[j].start;
+            int v=edge[j].end;
+            int w=edge[j].cost;
+
+            if(distance[u]+w<distance[v]){
+                distance[v]=distance[u]+w;
+            }
+        }
+    }
+
+    cout<<"\nBellman-Ford : "<<endl;
+
+    for(int i=0;i<n;i++){
+        cout<<start<<" - "<<i<<" = "<<distance[i]<<endl;
+    }
+}
+
+int main(){
+
+    bellmanFord();
+
+    return 0;
+}
+
+
+
+5555"FLOYD WARSHALL"
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+void floydWarshall(){
+
+    int n;
+    int graph[10][10];
+
+    cout<<"Enter number of vertices: ";
+    cin>>n;
+
+    cout<<"Enter graph:"<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>graph[i][j];
+        }
+    }
+
+    for(int k=0;k<n;k++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                graph[i][j]=min(graph[i][j], graph[i][k] + graph[k][j]);
+            }
+        }
+    }
+
+    cout<<"\nFloyd-Warshall : "<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<graph[i][j]<<" ";
+        }
+
+        cout<<endl;
+    }
+}
+
+int main(){
+
+    floydWarshall();
+
+    return 0;
+}
+
+
+
+6666"0/1 KNAPSACK"
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+void knapsack(){
+
+    int n;
+    int capacity;
+
+    cout<<"Enter number of items: ";
+    cin>>n;
+
+    cout<<"Enter capacity: ";
+    cin>>capacity;
+
+    int weight[20];
+    int value[20];
+    int dp[20][50]={0};
+
+    cout<<"Enter weights: ";
+
+    for(int i=0;i<n;i++)
+        cin>>weight[i];
+
+    cout<<"Enter values: ";
+
+    for(int i=0;i<n;i++)
+        cin>>value[i];
+
+    for(int i=1;i<=n;i++){
+        for(int w=1;w<=capacity;w++){
+           if(weight[i-1]<=w){
+                dp[i][w]=max(value[i-1] + dp[i-1][w-weight[i-1]], dp[i-1][w]);
+            }
+                        else{
+                dp[i][w]=dp[i-1][w];
+            }
+        }
+    }
+
+    cout<<"Maximum Value = "<<dp[n][capacity]<<endl;
+}
+
+int main(){
+
+    knapsack();
+
+    return 0;
+}
+
+
+
+7777"LCS"
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+void lcs(){
+
+    string a,b;
+
+    cout<<"Enter first string: ";
+    cin>>a;
+
+    cout<<"Enter second string: ";
+    cin>>b;
+
+    int n=a.length();
+    int m=b.length();
+
+    int dp[20][20]={0};
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(a[i-1]==b[j-1]){
+                dp[i][j]=dp[i-1][j-1]+1;
+            }
+                        else{
+                dp[i][j]=max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+
+    string lcs="";
+
+    int i=n;
+    int j=m;
+
+    while(i>0 && j>0){
+        if(a[i-1]==b[j-1]){
+            lcs += a[i-1];
+            i--;
+            j--;
+        }
+                else if(dp[i-1][j]>dp[i][j-1]){
+            i--;
+        }
+                else{
+            j--;
+        }
+    }
+
+    reverse(lcs.begin(),lcs.end());
+
+    cout<<"\nLCS : "<<lcs<<endl;
+
+    cout<<"LCS Length = "<<dp[n][m]<<endl;
+}
+
+int main(){
+
+    lcs();
+
+    return 0;
+}
+
+
+
+8888"KADEN'S"
+
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+void kadane(){
+
+    int n;
+
+    cout<<"Enter number of elements: ";
+    cin>>n;
+
+    int a[50];
+
+    cout<<"Enter elements: ";
+
+    for(int i=0;i<n;i++)
+        cin>>a[i];
+
+    int current=a[0];
+    int maximum=a[0];
+
+    for(int i=1;i<n;i++){
+        current=max(a[i], current+a[i]);
+        maximum=max(maximum, current);
+    }
+
+    cout<<"\nMaximum Subarray Sum = " <<maximum<<endl;
+}
+
+int main(){
+
+    kadane();
+
+    return 0;
+}
